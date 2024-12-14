@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Sentiment Analysis</title>
+        <script src="https://cdn.tailwindcss.com"></script> <!-- Tailwind CDN -->
+    </head>
+    <body class="bg-gray-50 text-gray-900 font-sans flex items-center justify-center min-h-screen">
+
+        <!-- Main container -->
+        <div class="w-full max-w-md sm:max-w-3xl p-6 sm:p-8 bg-white rounded-xl shadow-xl">
+
+            <!-- Header -->
+            <h1 class="text-3xl sm:text-4xl font-bold mb-6 sm:mb-8 text-center text-gray-800">Sentiment & Emotion Analysis</h1>
+
+            <!-- Stock Reviews -->
+            <div class="space-y-4 mb-6">
+                <button onclick="setReview('This is by far the best purchase I have made. The quality is fantastic and the sound is amazing. I couldn\'t be happier. I would recommend these to anyone looking for a high-quality pair of headphones. They are comfortable, well built, and provide excellent sound. 5 stars!')"
+                    class="w-full bg-green-100 text-green-800 p-4 rounded-md hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-green-500">
+                    Positive Review Example
+                </button>
+
+                <button onclick="setReview('I had high hopes for these headphones, but I\'m disappointed. The sound quality is poor, and the build feels cheap. The ear cups are uncomfortable, and I had issues with connectivity. Not worth the money at all. Would not recommend to anyone.')"
+                    class="w-full bg-red-100 text-red-800 p-4 rounded-md hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-red-500">
+                    Negative Review Example
+                </button>
+
+                <button onclick="setReview('The headphones are good for everyday use. The sound quality is decent, and they are comfortable enough for long listening sessions. However, there are a few minor drawbacks like the lack of advanced features. Still, they do the job well and are worth the price.')"
+                    class="w-full bg-yellow-100 text-yellow-800 p-4 rounded-md hover:bg-yellow-200 focus:outline-none focus:ring-2 focus:ring-yellow-500">
+                    Neutral Review Example
+                </button>
+            </div>
+
+            <!-- Form -->
+            <form method="POST" class="space-y-6" id="analysisForm" onsubmit="showLoader()">
+                {% csrf_token %}
+                <textarea name="review_text" id="review_text" rows="6"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
+                    placeholder="Enter your review here...">{{ review_text }}</textarea>
+                <button type="submit"
+                    class="w-full bg-blue-500 text-white py-3 rounded-md hover:bg-blue-600 transition duration-200">Analyze</button>
+            </form>
+
+            <!-- Loader -->
+            <div id="loader" class="mt-4 flex justify-center items-center hidden">
+                <div class="w-16 h-16 border-4 border-blue-500 border-t-transparent border-solid rounded-full animate-spin"></div>
+            </div>
+
+            <!-- Error message -->
+            {% if error_message %}
+            <div class="mt-4 text-red-600 font-semibold text-center">
+                {{ error_message }}
+            </div>
+            {% endif %}
+
+            <!-- Sentiment Section -->
+            {% if sentiment %}
+            <div class="mt-8 p-6 bg-blue-50 rounded-lg shadow-md">
+                <h2 class="text-xl sm:text-2xl font-semibold text-gray-700">Sentiment: 
+                    <span class="{{ sentiment_class }} text-xl font-bold">{{ sentiment }}</span>
+                </h2>
+            </div>
+            {% endif %}
+
+            <!-- Emotions Section -->
+            {% if emotions %}
+            <div class="mt-8 p-6 bg-green-50 rounded-lg shadow-md">
+                <h3 class="text-lg sm:text-xl font-semibold text-gray-700 mb-4">Emotions Detected:</h3>
+                <ul class="space-y-2">
+                    {% for emotion, score in emotions.items %}
+                    <li class="text-base sm:text-lg text-gray-800">{{ emotion }}: <strong>{{ score }}</strong></li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+
+        </div>
+
+        <script>
+            // Function to set the selected stock review into the textarea
+            function setReview(reviewText) {
+                document.getElementById('review_text').value = reviewText;
+            }
+
+            // Function to show the loader when the form is submitted
+            function showLoader() {
+                document.getElementById('loader').classList.remove('hidden'); // Show the loader
+                document.getElementById('analysisForm').classList.add('opacity-50'); // Dim the form during analysis
+            }
+        </script>
+
+    </body>
+</html>
