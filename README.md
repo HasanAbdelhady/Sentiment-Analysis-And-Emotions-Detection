@@ -35,18 +35,15 @@ cd sentiment_analysis
 
 2. Create and activate a virtual environment:
 
+On Windows:
 ```sh
-python -m venv venv #(On Windows)
-
-OR
-
-python3 -m venv venv #(On Mac & Linux)
-
-venv\Scripts\activate #( On Windows)
-
-OR
-
-source venv/bin/activate  # (On Mac & Lnux)
+python -m venv venv
+venv\Scripts\activate
+```
+On Mac & Linux:
+```sh
+python3 -m venv venv
+source venv/bin/activate
 ```
 
 3. Install required packages:
