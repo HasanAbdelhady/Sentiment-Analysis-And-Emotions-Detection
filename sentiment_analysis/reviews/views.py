@@ -12,17 +12,6 @@ logger = logging.getLogger(__name__)
 nltk_data_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'venv/nltk_data')
 nltk.data.path.append(nltk_data_path)
 
-# Ensure the required NLTK resource is available
-try:
-    nltk.data.find('corpora/omw-1.4')
-except LookupError:
-    logger.warning("NLTK resource 'omw-1.4' not found. Please ensure it's available.")
-    # Attempt to download it within the function
-    try:
-        nltk.download('omw-1.4')
-    except Exception as e:
-        logger.error(f"Failed to download 'omw-1.4': {str(e)}")
-
 def get_sentiment(polarity):
     """
     Classify sentiment based on polarity.
